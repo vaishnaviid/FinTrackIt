@@ -1,28 +1,23 @@
-#———stage1 - jar builder ————-
-
-# Maven image
+# Stage 1 - build stage
+# Build the JAR file using maven
 
 FROM maven:3.8.3-openjdk-17 AS builder 
 
-# Set working directory
+# Set working directory inside the container
 
 WORKDIR /app
 
-# Copy source code from local to container
+# Copy source code to working directory from host machine
 
 COPY . /app
 
 # Build application and skip test cases
 
-#EXPOSE 8080
-
 RUN mvn clean install -DskipTests=true
 
 #ENTRYPOINT ["java", "-jar", "/expenseapp.jar"]
 
-#--------------------------------------
-# Stage 2 - app build
-#--------------------------------------
+# Stage 2 - Reexecute JAR file from the build stage
 
 # Import small size java image
 
@@ -39,4 +34,4 @@ COPY --from=builder /app/target/*.jar /app/target/expenseapp.jar
 EXPOSE 8080
 
 # Start the application
-ENTRYPOINT ["java", "-jar", "/app/target/expenseapp.jar"]
+CMD ["java", "-jar", "/app/target/expenseapp.jar"]
