@@ -21,7 +21,7 @@ RUN mvn clean install -DskipTests=true
 
 # Import small size java image
 
-FROM openjdk:17-alpine
+FROM openjdk:17-jdk-alpine
 
 WORKDIR /app 
 
